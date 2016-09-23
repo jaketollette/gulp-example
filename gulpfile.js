@@ -46,31 +46,45 @@ gulp.task('concatCss', ['compileSass'], function(){
         .pipe(concat("application.css"))
         .pipe(gulp.dest('includes/css'))
 });
+
+//Minify CSS. Calls Concat first. Which also compiles SASS.
+//Compatibility is set to ie9 by default.
 gulp.task('minifyCSS', ['concatCss'], function(){
     return gulp.src('includes/css/*.css')
                 .pipe(cleanCSS({ compatibility: 'ie9' }))
                 .pipe(gulp.dest('includes/css'));
 });
 
+// Watches SCSS, JS/SRC, and subdirs for changes and
+// calls Concat for each (Which will build SASS and JS)
+// Does not minify scripts for development debugging
 gulp.task("watchFiles", function(){
     gulp.watch('includes/scss/**/*.scss', ['concatCss']);
     gulp.watch('includes/js/src/*.js', ['concatScripts'])
 });
 
+//Cleans up files created by gulp tasks
 gulp.task('clean', function(){
     del(['dist', 'includes/css/*.css*', 'includes/js/*.js*']);
 });
 
+//Builds the project. Compiles Sass, Concats Scripts and CSS
+//Created "dist" directory and copies files ready for production
 gulp.task("build", ["minifyScripts", "minifyCSS"], function(){
     return  gulp.src(['includes/**', '*.+(asp|html|txt|config)'], { base: './' })
+    // Commented out for less specific "includes" directory contents
     // return  gulp.src(['includes/css/*.css*', 'includes/js/*.js*',
     //                             'includes/images/**', 'includes/fonts/**',
     //                             'includes/*.+(asp)', '*.+(asp|html|txt|config)'], { base: './' })
                     .pipe(gulp.dest('dist'));
 });
 
+//Better named task for watching files. This will do what "watchFiles"
+// does above. Automatically compiles scripts (but does not minify)
 gulp.task('serve', ['watchFiles']);
 
+//Default task "gulp" in command line. This will run "clean" and then "build"
+//Which will remove all gulp created files and build from scratch.
 gulp.task("default", ["clean"], function(){
     gulp.start('build');
 });
