@@ -1,13 +1,13 @@
 'use strict';
 
-var gulp    = require('gulp'),
-      concat = require('gulp-concat'),
-      uglify  = require('gulp-uglify'),
- cleanCSS = require('gulp-clean-css'),
-     rename = require('gulp-rename'),
-          sass = require('gulp-sass'),
+var gulp = require('gulp'),
+        concat  = require('gulp-concat'),
+        uglify  = require('gulp-uglify'),
+        cleanCSS = require('gulp-clean-css'),
+        rename = require('gulp-rename'),
+        sass = require('gulp-sass'),
         maps = require('gulp-sourcemaps'),
-            del = require('del');
+        del = require('del');
 
 // Concatenate All JS (Order Matters!)
 gulp.task("concatScripts", function(){
